@@ -4,6 +4,7 @@
   "description": "JavaScript starter kit for Monkey Music Challenge",
   "main": "index.js",
   "dependencies": {
+    "pathfinding": "^0.4.13",
     "request-json": "^0.4.12"
   }
 }
