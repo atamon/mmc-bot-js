@@ -1,10 +1,12 @@
+var Controller = require('./Controller');
+
 // This is where you put your AI code!
 //
 // The AI looks at the current game state and decides the monkey's next move.
 function move(gameState) {
 
   // Every game has a limited number of turns. Use every turn wisely!
-  var remainingNumberOfTurns = gameState.turns;
+  var remainingNumberOfTurns = gameState.remainingTurns;
 
   // The level layout is a 2D-matrix (an array of arrays).
   //
@@ -25,7 +27,7 @@ function move(gameState) {
   var currentLevelLayout = gameState.layout;
 
   // This is an array of all music items you've currently picked up
-  var pickedUpMusicItems = gameState.pickedUp;
+  var pickedUpMusicItems = gameState.inventory;
 
   // The position attribute tells you where your monkey is
   var currentPositionOfMonkey = gameState.position;
@@ -96,11 +98,7 @@ function move(gameState) {
   // Got it? Sweet! This message will self destruct in five seconds...
 
   // TODO: You may want to do something smarter here
-  return randomDirection();
-}
-
-function randomDirection() {
-  return ['up', 'down', 'left', 'right'][Math.floor(Math.random() * 3)];
+  return Controller.chooseDirection(gameState.layout, { x: gameState.position[1], y: gameState.position[0]}, gameState.inventory);
 }
 
 exports.move = move;

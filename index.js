@@ -6,15 +6,23 @@ var serverUrl = 'http://warmup.monkeymusicchallenge.com';
 // You identify yourselves by your team name and your API key
 var teamName = process.argv[2];
 var apiKey = process.argv[3];
+var gameId = process.argv[4];
+var bet = process.argv[5] ;
 
 // Don't forget to provide the right command line arguments
-if (!teamName || !apiKey) {
+if (!teamName || !apiKey || !gameId || bet === undefined) {
   console.log('Usage: node index.js <your-team-name> <your-api-key>\n');
   if (!teamName) {
     console.log('  Missing argument: <your-team-name>');
   }
   if (!apiKey) {
     console.log('  Missing argument: <your-api-key>');
+  }
+  if (!gameId) {
+    console.log('  Missing argument: <game id>');
+  }
+  if (bet === undefined) {
+    console.log('  Missing argument: <bet amount>');
   }
   process.exit(1);
 }
@@ -26,7 +34,7 @@ var client = request.newClient(serverUrl);
 // You POST to a team-specific URL:
 // warmup.monkeymusicchallenge.com/team/<your-team-name>
 // Surf to this URL and watch your monkey carry out your commands!
-var teamUrl = '/team/' + encodeURIComponent(teamName);
+var teamUrl = '/game';
 
 // We've put the AI-code in a separate module
 var ai = require('./ai');
@@ -53,7 +61,7 @@ function handleReplyFromServer(error, response, responseBody) {
   var currentGameState = responseBody;
 
   // The current game state tells you if you have any turns left
-  if (currentGameState.turns === 0) {
+  if (currentGameState.remainingTurns <= 0) {
     // If the game is over, our server will tell you how you did
     // Go to warmup.monkeymusicchallenge.com/team/<your-team-name> for more details
     console.log('\nGame over!\n');
@@ -69,8 +77,10 @@ function handleReplyFromServer(error, response, responseBody) {
   // ...and send a new move command to the server
   var nextMoveCommand = {
     command: 'move',
-    direction: nextMoveDirection,
-    apiKey: apiKey
+    team: teamName,
+    gameId: gameId,
+    apiKey: apiKey,
+    direction: nextMoveDirection
   };
 
   // After sending your next move, you'll get a new reply,
@@ -80,14 +90,17 @@ function handleReplyFromServer(error, response, responseBody) {
 
 // Allright, time to get started!
 
-// To start a game, we send a 'new game' command to the server
-var newGameCommand = {
-  command: 'new game',
-  apiKey: apiKey
+// To join a game, we send a 'join game' command to the server
+var joinGameCommand = {
+  command: 'join game',
+  team: teamName,
+  gameId: gameId,
+  apiKey: apiKey,
+  bet: bet
 };
 
 // Here we go!
-client.post(teamUrl, newGameCommand, handleReplyFromServer);
+client.post(teamUrl, joinGameCommand, handleReplyFromServer);
 
 // If you have any questions, don't hesitate to drop us an email at
 // mmc@spotify.com
