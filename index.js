@@ -10,7 +10,7 @@ var gameId = process.argv[4];
 var bet = process.argv[5] ;
 
 // Don't forget to provide the right command line arguments
-if (!teamName || !apiKey || !gameId || bet === undefined) {
+if (!teamName || !apiKey || !gameId) {
   console.log('Usage: node index.js <your-team-name> <your-api-key>\n');
   if (!teamName) {
     console.log('  Missing argument: <your-team-name>');
@@ -20,9 +20,6 @@ if (!teamName || !apiKey || !gameId || bet === undefined) {
   }
   if (!gameId) {
     console.log('  Missing argument: <game id>');
-  }
-  if (bet === undefined) {
-    console.log('  Missing argument: <bet amount>');
   }
   process.exit(1);
 }
