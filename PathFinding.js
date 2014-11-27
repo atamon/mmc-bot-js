@@ -18,7 +18,7 @@ var findPath = function findPath(start, target, matrix) {
     return path;
   } else {
     console.warn('Unreachable target', target);
-    return undefined;
+    return null;
   }
 };
 
@@ -39,8 +39,8 @@ exports.takeStep = function takeStep(start, target, matrix) {
   // PathFinding returns the current position as the 0th step
   var step = path[1];
   return {
-    x: step[0],
-    y: step[1],
+    nextStep: { x: step[0], y: step[1] },
+    position: target,
     distance: path.length
   };
 };

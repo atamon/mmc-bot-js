@@ -1,13 +1,13 @@
 // Hi! Welcome to the Monkey Music Challenge JavaScript starter kit!
 
 // You control your monkey by sending POST requests to the Monkey Music server
-var serverUrl = 'http://warmup.monkeymusicchallenge.com';
+var serverUrl = 'http://localhost:3000';
 
 // You identify yourselves by your team name and your API key
 var teamName = process.argv[2];
 var apiKey = process.argv[3];
 var gameId = process.argv[4];
-var bet = process.argv[5] ;
+var stupidness = parseFloat(process.argv[5] || 0);
 
 // Don't forget to provide the right command line arguments
 if (!teamName || !apiKey || !gameId) {
@@ -62,14 +62,16 @@ function handleReplyFromServer(error, response, responseBody) {
     // If the game is over, our server will tell you how you did
     // Go to warmup.monkeymusicchallenge.com/team/<your-team-name> for more details
     console.log('\nGame over!\n');
-    console.log('  ' + currentGameState.message);
+    console.log('  ' + currentGameState.message || '');
     return;
+  } else if (currentGameState.message) {
+    console.log('  ' + currentGameState.message);
   }
 
-  console.log('Remaining turns: ' + currentGameState.turns);
+  console.log('Remaining turns: ' + currentGameState.remainingTurns);
 
   // Use your AI to decide in which direction to move...
-  var nextMoveDirection = ai.move(currentGameState);
+  var nextMoveDirection = ai.move(currentGameState, stupidness);
 
   // ...and send a new move command to the server
   var nextMoveCommand = {
@@ -92,8 +94,7 @@ var joinGameCommand = {
   command: 'join game',
   team: teamName,
   gameId: gameId,
-  apiKey: apiKey,
-  bet: bet
+  apiKey: apiKey
 };
 
 // Here we go!

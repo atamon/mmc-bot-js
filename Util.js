@@ -3,7 +3,7 @@
  * @param  {Object} mmLayout The body.layout object from server response
  * @return {Object} a layout object with 'matrix' and 'types' keys
  */
-exports.indexLayout = function toPathFindingLayout(mmLayout) {
+exports.indexLayout = function toPathFindingLayout(mmLayout, isUserWalkable) {
   var layout = {
     // Shorthand to find meaningful tiles by type
     // Ex. layout.types.playlist will contain all playlists on the map
@@ -25,7 +25,7 @@ exports.indexLayout = function toPathFindingLayout(mmLayout) {
         layout.types[tile].push({ x: x, y: y });
       }
 
-      return isTileWalkable(tile) ? 0 : 1;
+      return isTileWalkable(tile) || tile === 'user' && isUserWalkable ? 0 : 1;
     });
   });
 
@@ -37,7 +37,7 @@ exports.indexLayout = function toPathFindingLayout(mmLayout) {
  * @return {Boolean} Returns true iff the tile is walkable
  */
 var isTileWalkable = exports.isTileWalkable = function isTileWalkable(type) {
-  var walkables = ['empty', 'user', 'song', 'album', 'playlist', 'monkey', 'tunnel'];
+  var walkables = ['empty', 'song', 'album', 'playlist', 'monkey', 'tunnel'];
 
   return walkables.indexOf(type) !== -1;
 };

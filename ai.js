@@ -3,7 +3,7 @@ var Controller = require('./Controller');
 // This is where you put your AI code!
 //
 // The AI looks at the current game state and decides the monkey's next move.
-function move(gameState) {
+function move(gameState, stupidness) {
 
   // Every game has a limited number of turns. Use every turn wisely!
   var remainingNumberOfTurns = gameState.remainingTurns;
@@ -98,7 +98,7 @@ function move(gameState) {
   // Got it? Sweet! This message will self destruct in five seconds...
 
   // TODO: You may want to do something smarter here
-  return Controller.chooseDirection(gameState.layout, { x: gameState.position[1], y: gameState.position[0]}, gameState.inventory);
+  return Controller.chooseDirection(gameState, stupidness);
 }
 
 exports.move = move;
