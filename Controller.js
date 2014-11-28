@@ -84,6 +84,10 @@ function findNewGoal(gameState, stupidness) {
   }
 }
 
+function randomDirection() {
+  return ['up', 'down', 'left', 'right'][Math.floor(Math.random() * 3)];
+}
+
 /**
  * [chooseDirection description]
  * @param  {[type]} layout
@@ -99,7 +103,7 @@ exports.chooseDirection = function chooseDirection(gameState, stupidness) {
 
   // If we're very stupid
   if (Math.random() < stupidness / 5) {
-    return ['up', 'down', 'left', 'right'][Math.floor(Math.random() * 3)];
+    return randomDirection();
   }
 
   if (!shouldFindNewGoal(gameState, goalPosition)) {
@@ -110,6 +114,11 @@ exports.chooseDirection = function chooseDirection(gameState, stupidness) {
   }
 
   var goalPath = findNewGoal(gameState, stupidness);
+
+  // Chicken out if we don't know what we're doing
+  if (!goalPath) {
+    return randomDirection();
+  }
 
   goalPosition = goalPath.position;
   goalItem = gameState.layout[goalPosition.y][goalPosition.x];
