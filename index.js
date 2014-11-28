@@ -1,7 +1,7 @@
 // Hi! Welcome to the Monkey Music Challenge JavaScript starter kit!
 
 // You control your monkey by sending POST requests to the Monkey Music server
-var serverUrl = 'http://localhost:3000';
+var serverUrl = 'http://competition.monkeymusicchallenge.com/game';
 
 // You identify yourselves by your team name and your API key
 var teamName = process.argv[2];
@@ -27,11 +27,6 @@ if (!teamName || !apiKey || !gameId) {
 // In this starter kit, we use the request-json library to send POST requests
 var request = require('request-json');
 var client = request.newClient(serverUrl);
-
-// You POST to a team-specific URL:
-// warmup.monkeymusicchallenge.com/team/<your-team-name>
-// Surf to this URL and watch your monkey carry out your commands!
-var teamUrl = '/game';
 
 // We've put the AI-code in a separate module
 var ai = require('./ai');
@@ -84,7 +79,7 @@ function handleReplyFromServer(error, response, responseBody) {
 
   // After sending your next move, you'll get a new reply,
   // and this function will run again
-  client.post(teamUrl, nextMoveCommand, handleReplyFromServer);
+  client.post(serverUrl, nextMoveCommand, handleReplyFromServer);
 }
 
 // Allright, time to get started!
@@ -98,7 +93,7 @@ var joinGameCommand = {
 };
 
 // Here we go!
-client.post(teamUrl, joinGameCommand, handleReplyFromServer);
+client.post(serverUrl, joinGameCommand, handleReplyFromServer);
 
 // If you have any questions, don't hesitate to drop us an email at
 // mmc@spotify.com
